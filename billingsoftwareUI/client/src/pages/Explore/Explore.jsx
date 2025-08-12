@@ -54,7 +54,12 @@ const Explore = () => {
             height: "30%",
           }}
         >
-          <CartSummary />
+          <CartSummary
+            mobileNumber={mobileNumber}
+            setMobileNumber={setMobileNumber}
+            customerName={customerName}
+            setCustomerName={setCustomerName}
+          />
         </div>
       </div>
     </div>
