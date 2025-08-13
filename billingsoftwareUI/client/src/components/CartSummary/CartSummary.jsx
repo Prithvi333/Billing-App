@@ -8,6 +8,7 @@ import {
   verifyRazorpayPayment,
 } from "../../service/PaymentService";
 import { AppConstants } from "../../utils/constants";
+import ReceiptPopup from "../ReceiptPopup/ReceiptPopup";
 const CartSummary = ({
   customerName,
   setCustomerName,
@@ -22,6 +23,7 @@ const CartSummary = ({
     (total, item) => total + item.price * item.quantity,
     0
   );
+  console.log(orderDetails);
   const tax = totalAmount * 0.01;
 
   const grandTotal = totalAmount + tax;
@@ -32,9 +34,10 @@ const CartSummary = ({
     clearCart();
   };
 
-  const placeOrder = async () => {
+  const placeOrder = () => {
+    console.log("Placed....");
     setShowPopup(true);
-    clearAll;
+    clearAll();
   };
 
   const handlePrintReceipt = () => {
@@ -79,7 +82,7 @@ const CartSummary = ({
       subtotal: totalAmount,
       tax,
       grandTotal,
-      paymentMode: paymentMode.toUpperCase(),
+      paymentMethod: paymentMode.toUpperCase(),
     };
     try {
       const response = await createOrder(orderData);
@@ -102,7 +105,7 @@ const CartSummary = ({
           key: AppConstants.RAZORPAY_KEY_ID,
           amount: razorpayResponse.data.amount,
           currency: razorpayResponse.data.currency,
-          orderId: razorpayResponse.data.id,
+          order_id: razorpayResponse.data.id,
           name: "Retail Store",
           description: "Payment for order",
           handler: async (response) => {
@@ -138,6 +141,7 @@ const CartSummary = ({
     }
   };
   const verifyPaymentHandler = async (response, savedOrder) => {
+    console.log(response);
     const paymentData = {
       razorpayOrderId: response.razorpay_order_id,
       razorpayPaymentId: response.razorpay_payment_id,
@@ -183,14 +187,14 @@ const CartSummary = ({
       <div className="d-flex gap-3">
         <button
           className="btn btn-success flex-grow-1"
-          onClick={completePayment("cash")}
+          onClick={() => completePayment("cash")}
           disabled={isProcessing}
         >
           {isProcessing ? "Processing..." : "Cash"}
         </button>
         <button
           className="btn btn-primary flex-grow-1"
-          onClick={completePayment("upi")}
+          onClick={() => completePayment("upi")}
           disabled={isProcessing}
         >
           {isProcessing ? "Processing..." : "UPI"}
@@ -200,11 +204,24 @@ const CartSummary = ({
         <button
           className="btn btn-warning flex-grow-1"
           onClick={placeOrder}
-          disabled={isProcessing || !orderDetails}
+          disabled={isProcessing || cartItems.length == 0}
         >
           Place Order
         </button>
       </div>
+      {showPopup && (
+        <ReceiptPopup
+          orderDetails={{
+            ...orderDetails,
+            razorpayOrderId: orderDetails.paymentDetails?.razorpayOrderId,
+            razorpayPaymentId: orderDetails.paymentDetails?.razorpayPaymentId,
+          }}
+          onClose={() => {
+            setShowPopup(false);
+          }}
+          onPrint={handlePrintReceipt}
+        />
+      )}
     </div>
   );
 };

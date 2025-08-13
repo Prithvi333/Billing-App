@@ -7,6 +7,7 @@ import ManageItems from "./pages/ManageItems/ManageItems";
 import Explore from "./pages/Explore/Explore";
 import Login from "./pages/Login/Login";
 import { ToastContainer } from "react-toastify";
+import OrderHistory from "./pages/OrderHistory/OrderHistory";
 const App = () => {
   const location = useLocation();
   return (
@@ -21,6 +22,7 @@ const App = () => {
         <Route path="/users" element={<ManageUsers />} />
         <Route path="/items" element={<ManageItems />} />
         <Route path="/explore" element={<Explore />} />
+        <Route path="/orders" element={<OrderHistory />} />
       </Routes>
     </div>
   );
