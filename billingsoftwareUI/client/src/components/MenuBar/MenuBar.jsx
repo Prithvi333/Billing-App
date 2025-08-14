@@ -19,11 +19,7 @@ const MenuBar = () => {
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark px-2">
       <a className="navbar-brand" href="#">
-        <img
-          src="https://www.svgrepo.com/show/303109/adobe-xd-logo.svg"
-          alt="Logo"
-          height="40"
-        ></img>
+        <img src={assets.logo} alt="Logo" height="40"></img>
       </a>
       <button
         className="navbar-toggler"
