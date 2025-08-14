@@ -7,10 +7,14 @@ import in.prithvichauhan.billingapp.repository.OrderEntityRepository;
 import in.prithvichauhan.billingapp.service.OrderService;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -18,6 +22,7 @@ import java.util.List;
 @NoArgsConstructor
 public class OrderServiceImp implements OrderService {
 
+    private static final Logger log = LoggerFactory.getLogger(OrderServiceImp.class);
     @Autowired
     private OrderEntityRepository orderEntityRepository;
 
@@ -96,6 +101,7 @@ public class OrderServiceImp implements OrderService {
 
     @Override
     public OrderResponse verifyPayment(PaymentVerificationRequest request) {
+        System.out.println(request);
         OrderEntity existingOrder = orderEntityRepository.findByOrderId(request.getOrderId())
                 .orElseThrow(() -> new RuntimeException("Order not found"));
         if (!verifyRazorpaySignature(request.getRazorpayOrderId(),
@@ -107,9 +113,24 @@ public class OrderServiceImp implements OrderService {
         paymentDetails.setRazorpayPaymentId(request.getRazorpayPaymentId());
         paymentDetails.setRazorpaySignature(request.getRazorpaySignature());
         paymentDetails.setStatus(PaymentDetails.PaymentStatus.COMPLETE);
-
+        existingOrder.setPaymentDetails(paymentDetails);
         existingOrder = orderEntityRepository.save(existingOrder);
         return convertToResponse(existingOrder);
+    }
+
+    @Override
+    public Double sumSalesByDate(LocalDate date) {
+        return orderEntityRepository.sumSalesByDate(date);
+    }
+
+    @Override
+    public Long countByOrderDate(LocalDate date) {
+        return orderEntityRepository.contByOrderDate(date);
+    }
+
+    @Override
+    public List<OrderResponse> findRecentOrders() {
+        return orderEntityRepository.findRecentOrder(PageRequest.of(0, 5)).stream().map(this::convertToResponse).toList();
     }
 
     private boolean verifyRazorpaySignature(String razorpayOrderId, String razorpayPaymentId, String razorpaySignature) {

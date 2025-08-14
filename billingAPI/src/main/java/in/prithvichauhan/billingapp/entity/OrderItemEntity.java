@@ -1,6 +1,5 @@
 package in.prithvichauhan.billingapp.entity;
 
-import in.prithvichauhan.billingapp.io.PaymentDetails;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,7 +17,6 @@ public class OrderItemEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(unique = true)
     private String itemId;
     private String name;
     private Double price;

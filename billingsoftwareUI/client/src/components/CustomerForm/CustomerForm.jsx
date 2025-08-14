@@ -19,6 +19,7 @@ const CustomerForm = ({
             id="customerName"
             value={customerName}
             onChange={(e) => setCustomerName(e.target.value)}
+            required
           />
         </div>
       </div>
@@ -34,6 +35,7 @@ const CustomerForm = ({
             id="mobileNumber"
             value={mobileNumber}
             onChange={(e) => setMobileNumber(e.target.value)}
+            required
           />
         </div>
       </div>

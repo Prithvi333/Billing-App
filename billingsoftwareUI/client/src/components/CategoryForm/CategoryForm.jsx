@@ -86,6 +86,7 @@ const CategoryForm = () => {
                   placeholder="Category Name"
                   onChange={onChangeHandler}
                   value={data.name}
+                  required
                 />
               </div>
               <div className="mb-3">

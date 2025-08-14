@@ -61,7 +61,7 @@ const ItemForm = () => {
     >
       <div className="mx-2 mt-2">
         <div className="row">
-          <div className="card col-md-8 form-container">
+          <div className="card col-md-12 form-container">
             <div className="card-body">
               <form onSubmit={onSubmitHandler}>
                 <div className="mb-3">
@@ -93,6 +93,7 @@ const ItemForm = () => {
                     placeholder="Item Name"
                     value={data.name}
                     onChange={onChangeHandler}
+                    required
                   />
                 </div>
                 <div className="mb-3">
@@ -105,6 +106,7 @@ const ItemForm = () => {
                     className="form-control"
                     onChange={onChangeHandler}
                     value={data.categoryId}
+                    required
                   >
                     <option value="">--SELECT CATEGROY--</option>
                     {categories.map((category, index) => (
@@ -126,6 +128,7 @@ const ItemForm = () => {
                     placeholder="&#8377;200.00"
                     onChange={onChangeHandler}
                     value={data.price}
+                    required
                   />
                 </div>
                 <div className="mb-3">
